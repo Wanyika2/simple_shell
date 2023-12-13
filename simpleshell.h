@@ -1,12 +1,11 @@
 #ifndef SIMPLESHELL_H
 #define SIMPLESHELL_H
 
-#include  <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
-#include <sys/wait.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -34,26 +33,26 @@ extern char **environ;
 #define CONVERT_UNSIGNED	2
 
 /**
- *struct passinfo - contains arguments to pass into a function and
- *allowing uniform prototype for function pointer struct
- *@status: the return status of the last executed command
- *@arg: a string generated from getline containing args
-*@err_num: error code for exit()s
- *@argv: an array of strings generated from argument
- *@path: a string path for the current command
- *@argc: argument count
- *@line_count: error count
- *@fname: program filename
- *@env: linked list local copy of environ
- *@history: the history node
- *@alias: alias node
- *@env_changed: on if environ was changed
- *@cmd_buf: address of pointer to cmd_buf, on if chaining
- *@cmd_buf_type: CMD_type ||, &&, ;
- *@readfd: the fd from which to read line input
- *@histcount: the history line number count
-*@linecount_flag: if on count this line of input
- *@environ: custom modified copy of environ from LL env
+ * struct passinfo - contains arguments to pass into a function and
+ * allowing uniform prototype for function pointer struct
+ * @status: the return status of the last executed command
+ * @arg: a string generated from getline containing args
+ * @err_num: error code for exit()s
+ * @argv: an array of strings generated from argument
+ * @path: a string path for the current command
+ * @argc: argument count
+ * @line_count: error count
+ * @fname: program filename
+ * @env: linked list local copy of environ
+ * @history: the history node
+ * @alias: alias node
+ * @env_changed: on if environ was changed
+ * @cmd_buf: address of pointer to cmd_buf, on if chaining
+ * @cmd_buf_type: CMD_type ||, &&, ;
+ * @readfd: the fd from which to read line input
+ * @histcount: the history line number count
+ * @linecount_flag: if on count this line of input
+ * @environ: custom modified copy of environ from LL env
  */
 typedef struct passinfo
 {
@@ -75,6 +74,26 @@ char **cmd_buf;
 int histcount;
 int linecount_flag;
 char **environ;
+
+/**
+ * struct liststr - singly linked list
+ * @num: the number field
+ * @str: a string
+ * @next: points to the next node
+ * @env: linked list local copy of environ
+ * @alias: alias node
+ * @history: the history node
+ */
+typedef struct liststr
+{
+        int num;
+        char *str;
+        struct liststr *next;
+	list_t *env;
+	list_t *history;
+	list_t *alias;
+
+} list_t;
 
 	
 } info_t;
@@ -104,6 +123,21 @@ typedef struct liststr
 	char *str;
 	struct liststr *next;
 } list_t;
+
+/* lists1.c */
+size_t list_len(const list_t *);
+char **list_to_strings(list_t *);
+size_t print_list(const list_t *);
+list_t *node_starts_with(list_t *, char *, char);
+ssize_t get_node_index(list_t *, list_t *);
+
+/* lists.c */
+size_t print_list_str(const list_t *);
+list_t *add_node(list_t **, const char *, int);
+list_t *add_node_end(list_t **, const char *, int);
+void free_list(list_t **);
+int delete_node_at_index(list_t **, unsigned int);
+
 
 /**
  *struct builtin - contains a builtin string and related function
@@ -160,13 +194,6 @@ char *_strncpy(char *, char *, int);
 char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 
-/* lists1.c */
-size_t list_len(const list_t *);
-char **list_to_strings(list_t *);
-size_t print_list(const list_t *);
-list_t *node_starts_with(list_t *, char *, char);
-ssize_t get_node_index(list_t *, list_t *);
-
 /* getinfo.c */
 void clear_info(info_t *);
 void set_info(info_t *, char **);
@@ -181,7 +208,7 @@ void remove_comments(char *);
 
 /* string1.c */
 char *_strcpy(char *, char *);
-char *_strdup(const char *);
+char *strdup(const char *);
 void _puts(char *);
 int _putchar(char);
 
@@ -200,12 +227,6 @@ int _mycd(info_t *);
 int _myhelp(info_t *);
 int _myexit(info_t *);
 
-/* lists.c */
-size_t print_list_str(const list_t *);
-list_t *add_node(list_t **, const char *, int);
-list_t *add_node_end(list_t **, const char *, int);
-void free_list(list_t **);
-int delete_node_at_index(list_t **, unsigned int);
 
 /* environ.c */
 int _myenv(info_t *);
@@ -234,4 +255,4 @@ int _isalpha(int);
 char **strtow2(char *, char);
 char **strtow(char *, char *);
 
-#endif
+#endif /* SIMPLESHELL_H */
