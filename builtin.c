@@ -13,7 +13,7 @@ int _mycd(info_t *info)
 
 	s = getcwd(buffer, 1024);
 	if (!s)
-		_puts(“Error: Unable to get current working directory\n”);
+	_puts("Error: Unable to get current working directory\n");
 
 	if (!info->argv[1])
 	{

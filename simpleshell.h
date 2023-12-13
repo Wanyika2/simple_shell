@@ -22,15 +22,31 @@ extern char **environ;
 
 
 /* for command chaining */
-#define CMD_NORM		0
+#define CMD_NORM	0
 #define CMD_OR		1
 #define CMD_AND		2
-#define CMD_CHAIN		3
+#define CMD_CHAIN	3
 
 
 /* for convert_number() */
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
+
+/**
+ * struct liststr - singly linked list
+ * @num: the number field
+ * @str: a string
+ * @next: points to the next node
+ */
+typedef struct liststr {
+    char *str;
+    struct liststr *next;
+} list_t;
+
+typedef struct {
+
+} info_t;
+
 
 /**
  * struct passinfo - contains arguments to pass into a function and
@@ -68,39 +84,20 @@ typedef struct passinfo
 	list_t *history;
 	list_t *alias;
 	int env_changed;
-char **cmd_buf; 
+	char **cmd_buf; 
 	int cmd_buf_type; 
 	int readfd;
-int histcount;
-int linecount_flag;
-char **environ;
-
-/**
- * struct liststr - singly linked list
- * @num: the number field
- * @str: a string
- * @next: points to the next node
- * @env: linked list local copy of environ
- * @alias: alias node
- * @history: the history node
- */
-typedef struct liststr
-{
-        int num;
-        char *str;
-        struct liststr *next;
-	list_t *env;
-	list_t *history;
-	list_t *alias;
-
-} list_t;
+	int histcount;
+	int linecount_flag;
+	char **environ;
+} passinfo_t;
 
 	
-} info_t;
-
-#define INFO_INIT \
-{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-	0, 0, 0}
+#define BUF_FLUSH '\0'
+/**
+ * INFO_INIT - Macro to initialize an info_t structure
+ */
+#define INFO_INIT {0, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, CMD_NORM, 0, 0, NULL}
 
 /* shloop.c */
 int hsh(info_t *, char **);

@@ -1,4 +1,9 @@
 #include "simpleshell.h"
+#define WRITE_BUF_SIZE 1024
+
+static void _putfd(int fd, const char *str);
+static void _eputchar(char c);
+static void _eputs(const char *str);
 
 /**
  * _putfd - writes the character c to given fd

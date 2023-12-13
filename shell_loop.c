@@ -3,11 +3,10 @@
 /**
  * find_builtin - finds a builtin command
  * @info: the parameter & return info struct
- *
  * Return: -1 if builtin not found,
- *			0 if builtin executed successfully,
- *			1 if builtin found but not successful,
- *			-2 if builtin signals exit()
+ * 0 if builtin executed successfully,
+ * 1 if builtin found but not successful,
+ * -2 if builtin signals exit()
  */
 int find_builtin(info_t *info)
 {
@@ -58,14 +57,14 @@ perror("Fork failed:");
 			free_info(info, 1);
 			if (errno == EACCES)
 			{
-				perror(“Execve failed (permission denied):”);
+				perror("Execve failed (permission denied):");
 				exit(126);
 
 		}
 	
 	else
 	{
-		perror(“Execve failed:”);
+		perror("Execve failed:");
 		exit(1);
 	}
 	}
